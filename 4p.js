@@ -27,11 +27,11 @@ function saveData() {
     let forms = $("#orderForm > #form1:visible");
     let allBatchData = [];
 
-    forms.each(function (x) {
+    forms.each(function (index) {
         let batch = $(this);
 
         let formData = {
-            disountBatch: x + 1,
+            disountBatch: index + 1,
             setPopular: batch.find('input[type="radio"]').prop('checked'),
             quantity: batch.find('input[type="number"]').val(),
             discountType: batch.find('select[name="Discount-type"]').val(),
@@ -43,7 +43,6 @@ function saveData() {
     });
     // display the saved data 
     dataArray = allBatchData;
-
     displayData(allBatchData);
     // after save the forms should be removed and only one left with clear inputs
     $("#orderForm").empty();
@@ -103,41 +102,48 @@ function deleteRow(index) {
 function editRow(index) {
     let formNode = $("#form1").clone(true).css('display', 'block');
 
-    let editDiscountBatch = $(formNode).find("h3").text("Discount batch #" + dataArray[index].disountBatch);
-    let editPopularCheckbox = $(formNode).find('input[type="radio"]').prop('checked' , dataArray[index].setPopular);
-    let editQuantityInput = $(formNode).find('input[type="number"]').val(dataArray[index].quantity);
-    let editDiscountTypeSelect = $(formNode).find('select[name="Discount-type"]').val(dataArray[index].discountType);
-    let editNoteTextarea = $(formNode).find('textarea[name="note"]').val(dataArray[index].note);
-    let editAgreeTandCCheckbox = $(formNode).find('input[type="checkbox"]').prop('checked' , dataArray[index].agreeTandC);
-    let editDateInput = $(formNode).find('input[type="date"]').val(dataArray[index].date);
+    formNode.find("h3").text("Discount batch #" + dataArray[index].disountBatch);
+    formNode.find('input[type="radio"]').prop('checked', dataArray[index].setPopular);
+    formNode.find('input[type="number"]').val(dataArray[index].quantity);
+    formNode.find('select[name="Discount-type"]').val(dataArray[index].discountType);
+    formNode.find('textarea[name="note"]').val(dataArray[index].note);
+    formNode.find('input[type="checkbox"]').prop('checked', dataArray[index].agreeTandC);
+    formNode.find('input[type="date"]').val(dataArray[index].date);
 
     $("#orderForm").empty().append(formNode);
+    $( "#save-edit" ).prop( "disabled", false );
+    $("#save-edit").on("click" , function() {
+        saveEditBtn(index);
+        $( "#save-edit" ).prop( "disabled", true );
+    });
 }
 
-function saveEditBtn(index){
+function saveEditBtn(index) {
     saveEditedData(index);
 };
 
 function saveEditedData(index) {
-    let editedForm = $("#orderForm > div");
-    let editedData = {
-        disountBatch : dataArray[index].disountBatch,
-        setPopular: editedForm.find('input[type="radio"]').prop('checked'),
-        quantity: editedForm.find('input[type="number"]').val(),
-        discountType: editedForm.find('select[name="Discount-type"]').val(),
-        note: editedForm.find('textarea[name="note"]').val(),
-        agreeTandC: editedForm.find('input[type="checkbox"]').prop('checked'),
-        date: editedForm.find('input[type="date"]').val()
-    };
-    dataArray[index] = editedData;
+    let editedForm = $("#orderForm > #form1:visible");
 
-    // clear input
-    $("#orderForm").empty();
-    // append new form
-    let originalNode = $("#form1").clone(true).css("display" , "block");
-    $("#orderForm").append(originalNode);
+    if (dataArray[index]) {
+        let editedData = {
+            disountBatch: dataArray[index].disountBatch,
+            setPopular: editedForm.find('input[type="radio"]').prop('checked'),
+            quantity: editedForm.find('input[type="number"]').val(),
+            discountType: editedForm.find('select[name="Discount-type"]').val(),
+            note: editedForm.find('textarea[name="note"]').val(),
+            agreeTandC: editedForm.find('input[type="checkbox"]').prop('checked'),
+            date: editedForm.find('input[type="date"]').val(),
+        };
+        dataArray[index] = editedData;
 
-    renumberBatches();
-    displayData(dataArray);
+        // clear input
+        $("#orderForm").empty();
+        // append new form
+        addMore();
+        renumberBatches();
+        displayData(dataArray);
+    }
 }
+$( "#save-edit" ).prop( "disabled", true );
 
