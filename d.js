@@ -1,8 +1,10 @@
 let discountBatchCounter = 0;
 let dataArray = [];
-// hiding the orignal element
+
+// hiding the original element
 $("#form1").css("display", "none");
 addMore();
+
 function addMore() {
     let cloneNode = $("#form1").clone();
     $("#orderForm").append(cloneNode);
@@ -41,9 +43,10 @@ function saveData() {
         }
         allBatchData.push(formData);
     });
+
     // display the saved data 
     dataArray = allBatchData;
-
+    
     displayData(allBatchData);
     // after save the forms should be removed and only one left with clear inputs
     $("#orderForm").empty();
@@ -53,8 +56,9 @@ function saveData() {
 
 function displayData() {
     let tableBody = $("#savedDataTable tbody").empty();
+    // tableBody.empty();
 
-    $.each(dataArray, function (index, x) {
+    $.each(dataArray , function(index , x) {
         let newRow = tableBody[0].insertRow(tableBody[0].rows.length);
 
         let cell1 = newRow.insertCell(0);
@@ -66,40 +70,32 @@ function displayData() {
         let cell7 = newRow.insertCell(6);
         let cell8 = newRow.insertCell(7);
 
-        cell1.innerHTML = x.disountBatch;
-        cell2.innerHTML = x.setPopular ? 'Yes' : 'No';
-        cell3.innerHTML = x.quantity;
-        cell4.innerHTML = x.discountType;
-        cell5.innerHTML = x.note;
-        cell6.innerHTML = x.agreeTandC ? 'Yes' : 'No';
-        cell7.innerHTML = x.date;
+        cell1.html(x.disountBatch);
+        cell2.html(x.setPopular ? 'Yes' : 'No');
+        cell3.html(x.quantity);
+        cell4.html(x.discountType);
+        cell5.html(x.note);
+        cell6.html(x.agreeTandC ? 'Yes' : 'No');
+        cell7.html(x.date);
 
         // buttons to append
 
         let editButton = $("<button>", {
-            text: "Edit",
-            click: function () {
+            text : "Edit",
+            click : function () {
                 editRow(index);
-                // Make sure saveButton is defined in the scope or globally
                 saveButton.disabled = false;
             }
         });
 
         let deleteButton = $("<button>", {
-            text: "Delete",
-            click: function () {
+            text: "delete",
+            click : function () {
                 deleteRow(index);
             },
             style: "margin: 5px;"
         });
-        $(cell8).append(editButton, deleteButton)
+
+        cell8.append(editButton , deleteButton);
     });
 }
-
-// delete Saved row
-function deleteRow(index) {
-    dataArray.splice(index, 1);
-    displayData(dataArray);
-}
-
-// the note and the action in display in not working correctly ,for action its shows object object instead of button
