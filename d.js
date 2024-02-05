@@ -1,101 +1,38 @@
-let discountBatchCounter = 0;
-let dataArray = [];
+function editRow(index) {
+    let formNode = $('#form1').clone(true);
+    formNode.css('display', 'block');
 
-// hiding the original element
-$("#form1").css("display", "none");
-addMore();
+    let editDiscountBatch = formNode.find('.header-left h3');
+    editDiscountBatch.text("Discount Batch #" + dataArray[index].discountBatch);
 
-function addMore() {
-    let cloneNode = $("#form1").clone();
-    $("#orderForm").append(cloneNode);
-    $(cloneNode).find(".header-left h3").text("Discount Batch #" + discountBatchCounter++);
-    $(cloneNode).css("display", "block");
+    let editPopularCheckbox = formNode.find('input[type="radio"]');
+    editPopularCheckbox.prop('checked', dataArray[index].setPopular);
 
-    renumberBatches();
-}
+    let editQuantityInput = formNode.find('input[type="number"]');
+    editQuantityInput.val(dataArray[index].quantity);
 
-function deleteForm(x) {
-    $(x).closest('#form1').remove();
-    renumberBatches();
-}
+    let editDiscountTypeSelect = formNode.find('select[name="Discount-type"]');
+    editDiscountTypeSelect.val(dataArray[index].discountType);
 
-function renumberBatches() {
-    $("#orderForm > div").each(function (index) {
-        let discountBatchElement = $(this).find('.header-left h3').text("Discount batch #" + (index + 1));
-    });
-}
+    let editNoteTextarea = formNode.find('textarea[name="note"]');
+    editNoteTextarea.val(dataArray[index].note);
 
-function saveData() {
-    let forms = $("#orderForm > #form1:visible");
-    let allBatchData = [];
+    let editAgreeTandCCheckbox = formNode.find('input[type="checkbox"]');
+    editAgreeTandCCheckbox.prop('checked', dataArray[index].agreeTandC);
 
-    forms.each(function (x) {
-        let batch = $(this);
+    let editDateInput = formNode.find('input[type="date"]');
+    editDateInput.val(dataArray[index].date);
 
-        let formData = {
-            disountBatch: x + 1,
-            setPopular: batch.find('input[type="radio"]').prop('checked'),
-            quantity: batch.find('input[type="number"]').val(),
-            discountType: batch.find('select[name="Discount-type"]').val(),
-            note: batch.find('textarea[name="note"]').val(),
-            agreeTandC: batch.find('input[type="checkbox"]').prop('checked'),
-            date: batch.find('input[type="date"]').val()
-        }
-        allBatchData.push(formData);
+    let orderForm = $('#orderForm');
+    orderForm.empty().append(formNode);
+
+    saveButton.on('click', function () {
+        saveEditedData(index);
+        saveButton.prop('disabled', true);
     });
 
-    // display the saved data 
-    dataArray = allBatchData;
-    
-    displayData(allBatchData);
-    // after save the forms should be removed and only one left with clear inputs
-    $("#orderForm").empty();
-    addMore();
-    renumberBatches();
-}
-
-function displayData() {
-    let tableBody = $("#savedDataTable tbody").empty();
-    // tableBody.empty();
-
-    $.each(dataArray , function(index , x) {
-        let newRow = tableBody[0].insertRow(tableBody[0].rows.length);
-
-        let cell1 = newRow.insertCell(0);
-        let cell2 = newRow.insertCell(1);
-        let cell3 = newRow.insertCell(2);
-        let cell4 = newRow.insertCell(3);
-        let cell5 = newRow.insertCell(4);
-        let cell6 = newRow.insertCell(5);
-        let cell7 = newRow.insertCell(6);
-        let cell8 = newRow.insertCell(7);
-
-        cell1.html(x.disountBatch);
-        cell2.html(x.setPopular ? 'Yes' : 'No');
-        cell3.html(x.quantity);
-        cell4.html(x.discountType);
-        cell5.html(x.note);
-        cell6.html(x.agreeTandC ? 'Yes' : 'No');
-        cell7.html(x.date);
-
-        // buttons to append
-
-        let editButton = $("<button>", {
-            text : "Edit",
-            click : function () {
-                editRow(index);
-                saveButton.disabled = false;
-            }
-        });
-
-        let deleteButton = $("<button>", {
-            text: "delete",
-            click : function () {
-                deleteRow(index);
-            },
-            style: "margin: 5px;"
-        });
-
-        cell8.append(editButton , deleteButton);
-    });
+    let hideUpArrow = orderForm.find('#up-arrow');
+    hideUpArrow.css('visibility', 'hidden');
+    let hideDownArrow = orderForm.find('#down-arrow');
+    hideDownArrow.css('visibility', 'hidden');
 }

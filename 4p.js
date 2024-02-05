@@ -83,7 +83,6 @@ function displayData() {
                 saveButton.disabled = false;
             }
         });
-        
 
         let deleteButton = $("<button>", {
             text: "Delete",
@@ -94,15 +93,13 @@ function displayData() {
         });
         $(cell8).append(editButton, deleteButton)
     });
-}   
+}
 
 // delete Saved row
 function deleteRow(index) {
     dataArray.splice(index, 1);
     displayData(dataArray);
 }
-
-// edit row function for saved data 
 function editRow(index) {
     let formNode = $("#form1").clone(true).css('display', 'block');
 
@@ -117,34 +114,3 @@ function editRow(index) {
     $("#orderForm").empty().append(formNode);
 }
 
-function saveEditedData(index) {
-    let editedForm = $('#orderForm > div');
-    let editedData = {
-        discountBatch: dataArray[index].discountBatch,
-        setPopular: editedForm.find('input[type="radio"]').prop('checked'),
-        quantity: editedForm.find('input[type="number"]').val(),
-        discountType: editedForm.find('select[name="Discount-type"]').val(),
-        note: editedForm.find('textarea[name="note"]').val(),
-        agreeTandC: editedForm.find('input[type="checkbox"]').prop('checked'),
-        date: editedForm.find('input[type="date"]').val()
-    };
-    dataArray[index] = editedData;
-
-    let clearSaveInput = $('#orderForm');
-    clearSaveInput.empty();
-
-    let originalNode = $('#form1').clone();
-    originalNode.css('display', 'block');
-    $('#orderForm').append(originalNode);
-
-    renumberBatches();
-    displayData(dataArray);
-}
-
-
-function saveEditBtn(index) {
-    saveEditedData(index);
-}
-
-
-// after making changes to edit when i tap on save edit the changes are not displayed or changed
