@@ -80,7 +80,7 @@ function displayData() {
             text: "Edit",
             click: function () {
                 editRow(index);
-                saveButton.disabled = false;
+                // saveButton.disabled = false;
             }
         });
 
@@ -112,5 +112,32 @@ function editRow(index) {
     let editDateInput = $(formNode).find('input[type="date"]').val(dataArray[index].date);
 
     $("#orderForm").empty().append(formNode);
+}
+
+function saveEditBtn(index){
+    saveEditedData(index);
+};
+
+function saveEditedData(index) {
+    let editedForm = $("#orderForm > div");
+    let editedData = {
+        disountBatch : dataArray[index].disountBatch,
+        setPopular: editedForm.find('input[type="radio"]').prop('checked'),
+        quantity: editedForm.find('input[type="number"]').val(),
+        discountType: editedForm.find('select[name="Discount-type"]').val(),
+        note: editedForm.find('textarea[name="note"]').val(),
+        agreeTandC: editedForm.find('input[type="checkbox"]').prop('checked'),
+        date: editedForm.find('input[type="date"]').val()
+    };
+    dataArray[index] = editedData;
+
+    // clear input
+    $("#orderForm").empty();
+    // append new form
+    let originalNode = $("#form1").clone(true).css("display" , "block");
+    $("#orderForm").append(originalNode);
+
+    renumberBatches();
+    displayData(dataArray);
 }
 
