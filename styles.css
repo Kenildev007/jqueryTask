@@ -1,0 +1,81 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+body{
+    height: 100%;
+    width: 100%;
+}
+#main{
+    background-color: aliceblue;
+    height: auto;
+    width: 550px;
+}
+
+#form1{
+    padding: 20px;
+    height: auto;
+    width: 550px;
+    padding: 15px 20px;
+}
+
+#form1 #header{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+.header-right{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+#order-data{
+    padding: 10px 0px;
+    width: 100%;
+}
+.data-top{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.data-leftside{
+    width: 50%;
+}
+.data-rightside{
+    width: 50%;
+}
+.data-rightside select{
+    width: 100%;
+}
+.data-middle textarea{
+    width: 100%;
+    height: 50px;
+}
+.data-bottom{
+    display: flex;
+}
+.data-bottom .left{
+    width: 50%;
+}
+.data-bottom .right{
+    width: 50%;
+}
+.data-bottom .right input[type=date]{
+    width: 100%;
+}
+
+/* table data displayed */
+
+#savedDataTable {
+margin-top: 50px;
+}
+
+table , th , td{
+    border: 5px solid skyblue;
+    border-collapse: collapse;
+}
+th, td{
+    padding: 10px;
+}
