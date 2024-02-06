@@ -160,16 +160,24 @@ function saveEditedData(index) {
 $("#save-edit").prop("disabled", true);
 
 // moving code of batches   
+// working for up arrow down except last 2nd
 function moveNode(node, positions) {
     let currentForm = $(node).closest("#orderForm");
     let currentIndex = currentForm.children().index(node);
     let newIndex = currentIndex + positions;
 
     if (newIndex >= 0 && newIndex < currentForm.children().length) {
+        let targetNode = currentForm.children().eq(newIndex);
         let clonedNode = $(node).clone(true);
+        let selectedDiscountType = $(node).find('select[name="Discount-type"]').val();
         $(node).remove();
-        currentForm.children().eq(newIndex).before(clonedNode);
 
+        if (positions < 0) {
+            clonedNode.insertBefore(targetNode);
+        } else {
+            clonedNode.insertAfter(targetNode);
+        }
+        clonedNode.find('select[name="Discount-type"]').val(selectedDiscountType);
         setupEventListeners(clonedNode);
         renumberBatches();
     }
