@@ -1,6 +1,6 @@
 let discountBatchCounter = 0;
 let dataArray = [];
-// hiding the orignal element
+
 $("#form1").css("display", "none");
 addMore();
 function addMore() {
@@ -9,6 +9,7 @@ function addMore() {
     $(cloneNode).find(".header-left h3").text("Discount Batch #" + discountBatchCounter++);
     $(cloneNode).css("display", "block");
 
+    setupEventListeners(cloneNode);
     renumberBatches();
 }
 
@@ -46,7 +47,11 @@ function saveData() {
     displayData(allBatchData);
     // after save the forms should be removed and only one left with clear inputs
     $("#orderForm").empty();
-    addMore();
+
+    let originalNode = $("#form1").clone(true).css("display", "block");
+    $("#orderForm").append(originalNode);
+    // addMore();
+    setupEventListeners(originalNode);
     renumberBatches();
 }
 
@@ -111,11 +116,15 @@ function editRow(index) {
     formNode.find('input[type="date"]').val(dataArray[index].date);
 
     $("#orderForm").empty().append(formNode);
-    $( "#save-edit" ).prop( "disabled", false ).off("click");
-    $("#save-edit").on("click" , function() {
+    $("#save-edit").prop("disabled", false).off("click");
+    $("#save-edit").on("click", function () {
         saveEditedData(index);
-        $( "#save-edit" ).prop( "disabled", true );
+        $("#save-edit").prop("disabled", true);
     });
+
+    $(formNode).find("#up-arrow").css('visibility', 'hidden');
+    $(formNode).find("#down-arrow").css('visibility', 'hidden');
+    
 }
 
 function saveEditBtn(index) {
@@ -140,9 +149,47 @@ function saveEditedData(index) {
         // clear input
         $("#orderForm").empty();
         // append new form
-        addMore();
+        let originalNode = $("#form1").clone(true).css("display", "block");
+        $("#orderForm").append(originalNode);
+        // addMore();
+        setupEventListeners(originalNode);
         renumberBatches();
         displayData(dataArray);
     }
 }
-$( "#save-edit" ).prop( "disabled", true ); 
+$("#save-edit").prop("disabled", true);
+
+// moving code of batches
+function moveNode(node, positions) {
+    let currentForm = $(node).closest("#orderForm");
+    let currentIndex = currentForm.children().index(node);
+    let newIndex = currentIndex + positions;
+
+    if (newIndex >= 0 && newIndex < currentForm.children().length) {
+        let clonedNode = $(node).clone(true);
+        $(node).remove();
+        currentForm.children().eq(newIndex).before(clonedNode);
+
+        setupEventListeners(clonedNode);
+        renumberBatches();
+    }
+}
+function setupEventListeners(node) {
+    let upArrowButton = $(node).find("#up-arrow");
+    let downArrowButton = $(node).find("#down-arrow");
+
+    upArrowButton.on("click", function () {
+        moveNode(node, -1);
+    });
+    downArrowButton.on("click", function () {
+        moveNode(node, 1);
+    });
+
+
+    $(node).on('DOMNodeInserted', function () {
+        upArrowButton.css('visibility', $(node).prev().length ? 'visible' : 'hidden');
+        downArrowButton.css('visibility', $(node).next().length ? 'visible' : 'hidden');
+    });
+}
+
+
