@@ -111,9 +111,9 @@ function editRow(index) {
     formNode.find('input[type="date"]').val(dataArray[index].date);
 
     $("#orderForm").empty().append(formNode);
-    $( "#save-edit" ).prop( "disabled", false );
+    $( "#save-edit" ).prop( "disabled", false ).off("click");
     $("#save-edit").on("click" , function() {
-        saveEditBtn(index);
+        saveEditedData(index);
         $( "#save-edit" ).prop( "disabled", true );
     });
 }
@@ -145,5 +145,4 @@ function saveEditedData(index) {
         displayData(dataArray);
     }
 }
-$( "#save-edit" ).prop( "disabled", true );
-
+$( "#save-edit" ).prop( "disabled", true ); 
