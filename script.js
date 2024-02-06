@@ -56,46 +56,36 @@ function saveData() {
 }
 
 function displayData() {
-    let tableBody = $("#savedDataTable tbody").empty();
+    $("#savedDataTable tbody").empty();
 
-    $.each(dataArray, function (index, x) {
-        let newRow = tableBody[0].insertRow(tableBody[0].rows.length);
+    $.each(dataArray, function (index , x) {
+        let newRow = $("<tr>");
+        
+        let cell1 = $("<td>").html(x.disountBatch);
+        let cell2 = $("<td>").html(x.setPopular ? 'Yes' : 'No');
+        let cell3 = $("<td>").html(x.quantity);
+        let cell4 = $("<td>").html(x.discountType);
+        let cell5 = $("<td>").html(x.note);
+        let cell6 = $("<td>").html(x.agreeTandC ? 'Yes' : 'No');
+        let cell7 = $("<td>").html(x.date);
+        let cell8 = $("<td>");
 
-        let cell1 = newRow.insertCell(0);
-        let cell2 = newRow.insertCell(1);
-        let cell3 = newRow.insertCell(2);
-        let cell4 = newRow.insertCell(3);
-        let cell5 = newRow.insertCell(4);
-        let cell6 = newRow.insertCell(5);
-        let cell7 = newRow.insertCell(6);
-        let cell8 = newRow.insertCell(7);
-
-        cell1.innerHTML = x.disountBatch;
-        cell2.innerHTML = x.setPopular ? 'Yes' : 'No';
-        cell3.innerHTML = x.quantity;
-        cell4.innerHTML = x.discountType;
-        cell5.innerHTML = x.note;
-        cell6.innerHTML = x.agreeTandC ? 'Yes' : 'No';
-        cell7.innerHTML = x.date;
-
-        // buttons to append
-
-        let editButton = $("<button>", {
+        let editButton = $("<button>" , {
             text: "Edit",
-            click: function () {
+            click : function () {
                 editRow(index);
-                // saveButton.disabled = false;
             }
         });
-
-        let deleteButton = $("<button>", {
+        let deleteButton = $("<button>" , {
             text: "Delete",
-            click: function () {
+            click : function () {
                 deleteRow(index);
             },
-            style: "margin: 5px;"
+            style : "margin: 5px;"
         });
-        $(cell8).append(editButton, deleteButton)
+        $(cell8).append(editButton,deleteButton);
+        newRow.append(cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8);
+        $("#savedDataTable tbody").append(newRow);
     });
 }
 
@@ -160,7 +150,6 @@ function saveEditedData(index) {
 $("#save-edit").prop("disabled", true);
 
 // moving code of batches   
-// working for up arrow down except last 2nd
 function moveNode(node, positions) {
     let currentForm = $(node).closest("#orderForm");
     let currentIndex = currentForm.children().index(node);
@@ -199,4 +188,3 @@ function setupEventListeners(node) {
         downArrowButton.css('visibility', $(node).next().length ? 'visible' : 'hidden');
     });
 }
-
