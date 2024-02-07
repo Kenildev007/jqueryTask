@@ -1,0 +1,30 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+body {
+    height: 100%;
+    width: 100%;
+}
+#main{
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center ;
+}
+#main #columns {
+    width: 250px;
+}
+#main #rows {
+    width: 250px;
+}
+input[type="number"] {
+    margin-right: 50px;
+}
+#container{
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center ;
+}
