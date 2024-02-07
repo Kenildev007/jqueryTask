@@ -12,13 +12,19 @@ $(document).ready(function () {
         $(cloneNode).find(".header-left h3").text("Discount Batch #" + discountBatchCounter++);
         $(cloneNode).css("display", "block");
 
+        $(cloneNode).find("#delete").on("click", function () {
+            deleteForm(this);
+        });
+
         setupEventListeners(cloneNode);
         renumberBatches();
+        updateArrowVisibility()
     }
 
     function deleteForm(x) {
         $(x).closest('#form1').remove();
         renumberBatches();
+        updateArrowVisibility();
     }
 
     function renumberBatches() {
@@ -49,7 +55,6 @@ $(document).ready(function () {
         dataArray = allBatchData;
         displayData(allBatchData);
         $("#orderForm").empty();
-
         addMore();
     }
 
@@ -104,6 +109,10 @@ $(document).ready(function () {
         formNode.find('input[type="date"]').val(dataArray[index].date);
 
         $("#orderForm").empty().append(formNode);
+        // to delete form in the edit mode
+        // $(formNode).find("#delete").on("click", function() {
+        //     deleteForm(this);
+        // });
         $("#save-edit").prop("disabled", false).off("click").on("click", function () {
             saveEditedData(index);
             $("#save-edit").prop("disabled", true);
@@ -169,20 +178,25 @@ $(document).ready(function () {
 
         upArrowButton.on("click", function () {
             moveNode(node, -1);
+            updateArrowVisibility();
         });
         downArrowButton.on("click", function () {
             moveNode(node, 1);
-        });
-
-        $(node).on('DOMNodeInserted', function () {
-            upArrowButton.css('visibility', $(node).prev().length ? 'visible' : 'hidden');
-            downArrowButton.css('visibility', $(node).next().length ? 'visible' : 'hidden');
+            updateArrowVisibility();
         });
     }
-    // 
+
+    function updateArrowVisibility() {
+        $("#orderForm > #form1").each(function (index) {
+            let upArrowButton = $(this).find("#up-arrow");
+            let downArrowButton = $(this).find("#down-arrow");
+
+            upArrowButton.css('visibility', index === 0 ? 'hidden' : 'visible');
+            downArrowButton.css('visibility', index === $("#orderForm > #form1").length - 1 ? 'hidden' : 'visible');
+        });
+    }
     // adding the event listners 
     $("#add-more").on("click", addMore);
     $("#save").on("click", saveData);
-    $(".delete").on("click", deleteForm);
     addMore();
 });
